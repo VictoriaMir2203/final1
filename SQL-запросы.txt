@@ -1,0 +1,74 @@
+1. SELECT species_name
+FROM species
+WHERE species_id = (SELECT MIN(species_id) FROM species);
+
+2. SELECT species_name
+FROM species
+WHERE species_amount > 1800;
+
+3. SELECT species_name
+FROM species
+WHERE type_id = 5
+AND species_name LIKE 'п%';
+
+4. SELECT species_name
+FROM species
+WHERE species_name LIKE '%са'
+OR species_amount = 5;
+
+1. SELECT species_name
+FROM species
+WHERE to_char(date_start, 'YYYY') = '2023';
+
+2. SELECT s.species_name
+FROM species s
+JOIN species_in_places sp ON s.species_id = sp.species_id
+WHERE s.species_status = 'absent'
+AND sp.place_id = 3;
+
+3. SELECT s.species_name, s.species_amount
+FROM species AS s
+JOIN species_in_places AS sip ON sip.species_id = s.species_id
+JOIN places AS p ON sip.place_id = p.place_id
+WHERE p.place_name = 'дом' AND to_char(s.date_start::date, 'MM') = '05';
+
+4. SELECT species_name
+FROM species
+WHERE species_name LIKE '% %';
+
+1. SELECT species_name
+FROM species
+WHERE date_start = (
+SELECT date_start
+FROM species
+WHERE species_name = 'малыш'
+)
+AND species_name <> 'малыш';
+
+2. SELECT s.species_name
+FROM species s
+JOIN species_in_places sp ON s.species_id = sp.species_id
+JOIN places p ON sp.place_id = p.place_id
+WHERE p.place_name IN ('дом', 'сарай')
+AND p.place_size = (
+SELECT MAX(place_size)
+FROM places
+WHERE place_name IN ('дом', 'сарай')
+);
+
+3. SELECT s.species_name
+FROM species s
+JOIN species_in_places sp ON s.species_id = sp.species_id
+JOIN places p ON sp.place_id = p.place_id
+WHERE p.place_name = 'дом'
+ORDER BY s.species_amount DESC
+OFFSET 4
+LIMIT 1;
+
+4. SELECT s.species_name
+FROM species s
+LEFT JOIN species_in_places sp ON s.species_id = sp.species_id
+WHERE s.species_status = 'fairy'
+  AND sp.place_id IS NULL;
+
+ты все можешь!
